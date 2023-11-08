@@ -118,7 +118,9 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Image from 'next/image';
-import Link from 'next/link'
+import Link from 'next/link';
+import { Alert } from 'antd';
+import { message } from 'antd';
 
 const SignupSchema = Yup.object().shape({
   

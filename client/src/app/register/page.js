@@ -4,7 +4,9 @@ import React from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Link from 'next/link';
+import { message } from 'antd';
 
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 const SignupSchema = Yup.object().shape({
   fullName: Yup.string()
@@ -16,29 +18,58 @@ const SignupSchema = Yup.object().shape({
   .required('No password provided.') 
   .min(8, 'Password is too short - should be 8 chars minimum.')
   .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
-confirmPassword: Yup.string()
+  confirmPassword: Yup.string()
     .oneOf([Yup.ref("password"), null], "passswords must match"),  
-
+    phoneNumber: Yup.string()
+  .required("required")
+  .matches(phoneRegExp, 'Phone number is not valid')
+  .min(10, "too short")
+  .max(10, "too long"),
+    
 });
 
-const Register = () => (
-  <div>
-    <h1>SignIn</h1>
+const Register = () => {
+  
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const handleRegister = async(values)=>{
+    const res = await fetch('http://localhost:4000/register', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify(values)
+    })
+
+    const data = await res.json()
+
+    messageApi.open({
+      type: res.status == 200 ? 'success' : 'error',
+      content: data.msg,
+    });
+
+    console.log(res)
+
+  }
+
+  return(
+    <div>
+    <h1>Sign Up</h1>
     <Formik
       initialValues={{
-        firstName: '',
-        lastName: '',
+        fullName: '',
         email: '',
+        password: '',
+        phoneNumber: '',
       }}
       validationSchema={SignupSchema}
       onSubmit={values => {
         // same shape as initial values
-        console.log(values);
+        handleRegister(values)
       }}
     >
       {({ errors, touched }) => (
         <Form>
           
+          {contextHolder}
           
           <Field name="fullName" type="text" placeholder="Full Name"/>
           {errors.fullName && touched.fullName ? (
@@ -68,6 +99,8 @@ const Register = () => (
       )}
     </Formik>
   </div>
-);
+  )
+ 
+}
 
 export default Register;
