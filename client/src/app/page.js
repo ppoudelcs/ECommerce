@@ -1,77 +1,83 @@
 'use client'
 
-import React, { useState } from 'react';
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu, Button, theme } from 'antd';
-const { Header, Sider, Content } = Layout;
+import React, {useEffect, useState} from 'react';
+import { Breadcrumb, Layout, Menu, theme } from 'antd';
+const { Header, Content, Footer } = Layout;
 const App = () => {
-  const [collapsed, setCollapsed] = useState(false);
+
+  const fetchProducts= async() => {
+    const res = await fetch('http://localhost:4000/products')
+    const data = await res.json()
+    console.log(data.productList)
+
+
+  }
+
+  useEffect(()=>{
+    fetchProducts()
+  },[])
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   return (
     <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
+      <Header
+        style={{
+          position: 'sticky',
+          top: 0,
+          zIndex: 1,
+          width: '100%',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <div className="demo-logo" />
         <Menu
           theme="dark"
-          mode="inline"
-          defaultSelectedKeys={['1']}
-          items={[
-            {
-              key: '1',
-              icon: <UserOutlined />,
-              label: 'nav 1',
-            },
-            {
-              key: '2',
-              icon: <VideoCameraOutlined />,
-              label: 'nav 2',
-            },
-            {
-              key: '3',
-              icon: <UploadOutlined />,
-              label: 'nav 3',
-            },
-          ]}
+          mode="horizontal"
+          defaultSelectedKeys={['2']}
+          items={new Array(3).fill(null).map((_, index) => ({
+            key: String(index + 1),
+            label: `nav ${index + 1}`,
+          }))}
         />
-      </Sider>
-      <Layout>
-        <Header
+      </Header>
+      <Content
+        className="site-layout"
+        style={{
+          padding: '0 50px',
+        }}
+      >
+        <Breadcrumb
           style={{
-            padding: 0,
-            background: colorBgContainer,
+            margin: '16px 0',
           }}
         >
-          <Button
-            type="text"
-            icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: '16px',
-              width: 64,
-              height: 64,
-            }}
-          />
-        </Header>
-        <Content
+          <Breadcrumb.Item>Home</Breadcrumb.Item>
+          <Breadcrumb.Item>List</Breadcrumb.Item>
+          <Breadcrumb.Item>App</Breadcrumb.Item>
+        </Breadcrumb>
+        <div
           style={{
-            margin: '24px 16px',
             padding: 24,
-            minHeight: 280,
+            minHeight: 380,
             background: colorBgContainer,
           }}
         >
           Content
-        </Content>
-      </Layout>
+        </div>
+      </Content>
+      <Footer
+        style={{
+          textAlign: 'center',
+        }}
+      >
+        Ant Design ©2023 Created by Ant UED
+      </Footer>
     </Layout>
   );
 };
+
+
 export default App;

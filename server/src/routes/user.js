@@ -7,7 +7,7 @@ const saltRounds = 10;
 
 router.post('/register', async (req, res) => {
 
-console.log(req.body)   
+ 
  try {   
   
       const userExists = await User.findOne({phoneNumber: req.body.phoneNumber})

@@ -17,6 +17,15 @@ const ProductSchema = Yup.object().shape({
     .min(5, 'Too Short!')
     .max(50, 'Too Long!')
     .required('Required'),
+    productPrice: Yup.number()
+    .min(1, 'Too Short!')
+    .max(100000, 'Too Long!')
+    .required('Required'),
+    productDescription: Yup.string()
+    .min(10, 'Too Short!')
+    .max(100, 'Too Long!')
+    .required('Required'),
+
 });
 
 const Product = () => {
@@ -50,6 +59,7 @@ const Product = () => {
           productName: '',
           productType: '',
           productPrice: '',
+          productDescription: '',
           
         }}
         validationSchema={ProductSchema}
@@ -74,10 +84,17 @@ const Product = () => {
               <div>{errors.productType}</div>
             ) : null}
             <br />
-            <Field name="productPrice" type="text" placeholder="Product Price" />
+            <Field name="productPrice" type="text" placeholder="Price in NPR" />
             {errors.productPrice && touched.productPrice ? (
               <div>{errors.productPrice}</div>
             ) : null}
+            <br/>
+            <Field name="productDescription" type="text" placeholder="Describe the product" />
+            {errors.productDescription && touched.productDescription ? (
+              <div>{errors.productDescription}</div>
+            ) : null}
+            <br/>
+            <input type='file'/>
             <br/>
             <button type="submit">Register</button> 
             <br/>

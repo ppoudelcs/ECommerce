@@ -10,6 +10,7 @@ const productSchema = new mongoose.Schema({
   productName: String, // String is shorthand for {type: String}
   productType: String,
   productPrice: String,
+  productDescription: String
   
   
 });
