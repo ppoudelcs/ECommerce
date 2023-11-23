@@ -15,28 +15,30 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
   email: Yup.string().email('Invalid email').required('Required'),
   password: Yup.string()
-  .required('No password provided.') 
-  .min(8, 'Password is too short - should be 8 chars minimum.')
-  .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
+    .required('No password provided.')
+    .min(8, 'Password is too short - should be 8 chars minimum.')
+    .matches(/[a-zA-Z]/, 'Password can only contain Latin letters.'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref("password"), null], "passswords must match"),  
-    phoneNumber: Yup.string()
-  .required("required")
-  .matches(phoneRegExp, 'Phone number is not valid')
-  .min(10, "too short")
-  .max(10, "too long"),
-    
+    .oneOf([Yup.ref("password"), null], "passswords must match"),
+  phoneNumber: Yup.string()
+    .required("required")
+    .matches(phoneRegExp, 'Phone number is not valid')
+    .min(10, "too short")
+    .max(10, "too long"),
+
 });
 
 const Register = () => {
-  
-  const [messageApi, contextHolder] = message.useMessage();
 
-  const handleRegister = async(values)=>{
+  const [messageApi, contextHolder] = message.useMessage();
+  //?? relationship betn messageApi, contextHolder
+
+  const handleRegister = async (values) => {
     const res = await fetch('http://localhost:4000/register', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify(values)
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(values),
+      mode: 'no-cors'
     })
 
     const data = await res.json()
@@ -50,57 +52,57 @@ const Register = () => {
 
   }
 
-  return(
+  return (
     <div>
-    <h1>Sign Up</h1>
-    <Formik
-      initialValues={{
-        fullName: '',
-        email: '',
-        password: '',
-        phoneNumber: '',
-      }}
-      validationSchema={SignupSchema}
-      onSubmit={values => {
-        // same shape as initial values
-        handleRegister(values)
-      }}
-    >
-      {({ errors, touched }) => (
-        <Form>
-          
-          {contextHolder}
-          
-          <Field name="fullName" type="text" placeholder="Full Name"/>
-          {errors.fullName && touched.fullName ? (
-            <div>{errors.fullName}</div>
-          ) : null}
-          <br/>
-          <Field name="email" type="email" placeholder="Email"/>
-          {errors.email && touched.email ? <div>{errors.email}</div> : null}
-          <br/>
-          <Field name="password" type="password" placeholder="Password"/>
-          {errors.password && touched.password ? <div>{errors.password}</div> : null}
-          <br/>
-          <Field name="confirmPassword" type="password" placeholder="Confirm Password"/>
-          {errors.confirmPassword && touched.confirmPassword ? <div>{errors.confirmPassword}</div> : null}
-          <br/>
-          <Field name="phoneNumber" type="tel" placeholder="Enter phone number"/>
-          {errors.phoneNumber && touched.phoneNumber ? <div>{errors.phoneNumber}</div> : null}
-          <br/>
+      <h1>Sign Up</h1>
+      <Formik
+        initialValues={{
+          fullName: '',
+          email: '',
+          password: '',
+          phoneNumber: '',
+        }}
+        validationSchema={SignupSchema}
+        onSubmit={values => {
+          // same shape as initial values
+          handleRegister(values)
+        }}
+      >
+        {({ errors, touched }) => (
+          <Form>
+
+            {contextHolder}
+
+            <Field name="fullName" type="text" placeholder="Full Name" />
+            {errors.fullName && touched.fullName ? (
+              <div>{errors.fullName}</div>
+            ) : null}
+            <br />
+            <Field name="email" type="email" placeholder="Email" />
+            {errors.email && touched.email ? <div>{errors.email}</div> : null}
+            <br />
+            <Field name="password" type="password" placeholder="Password" />
+            {errors.password && touched.password ? <div>{errors.password}</div> : null}
+            <br />
+            <Field name="confirmPassword" type="password" placeholder="Confirm Password" />
+            {errors.confirmPassword && touched.confirmPassword ? <div>{errors.confirmPassword}</div> : null}
+            <br />
+            <Field name="phoneNumber" type="tel" placeholder="Enter phone number" />
+            {errors.phoneNumber && touched.phoneNumber ? <div>{errors.phoneNumber}</div> : null}
+            <br />
 
 
-          <button type="submit">SignUp</button>
-          <br/>
+            <button type="submit">SignUp</button>
+            <br />
 
-            Already have an account? <Link href="/">Sign In</Link> instead
-          
-        </Form>
-      )}
-    </Formik>
-  </div>
+            Already have an account? <Link href="/login">Sign In</Link> instead
+
+          </Form>
+        )}
+      </Formik>
+    </div>
   )
- 
+
 }
 
 export default Register;
