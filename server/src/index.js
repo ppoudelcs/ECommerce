@@ -5,13 +5,16 @@ const app = express()
 
 const userRoute=require('./routes/user')
 const productRoute=require('./routes/product')
-app.use(userRoute)
+
+app.use(express.json())// Plain object to Json
+app.use(cors())
+
+app.use('/',userRoute)
 app.use(productRoute)
 
 
 
-app.use(express.json())// Plain object to Json
-app.use(cors())
+
 
 const port = 4000
 connection()
