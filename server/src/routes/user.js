@@ -4,6 +4,8 @@ const User = require('../models/user')
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+const jwt = require('jsonwebtoken');
+
 
 router.post('/register', async (req, res) => {
 
@@ -40,9 +42,9 @@ router.post('/register', async (req, res) => {
         res.status(401).json({ msg: 'Invalid Credentials' })
       } else {
         const isMatched = await bcrypt.compare(req.body.password, userDetails.password)
-        console.log(isMatched)
         if (isMatched) {
-          res.json({ msg: 'Login Success' })
+          const token = jwt.sign({ foo: 'bar' }, 'shhhhh');
+          res.json({ msg: 'Login Success', token })
         } else {
           res.status(401).json({ msg: 'Incorrect password' })
         }

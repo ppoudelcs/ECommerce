@@ -1,50 +1,66 @@
 'use client'
+import React, {useState, useEffect} from 'react';
+import Image from 'next/image'
+import { Breadcrumb, Layout, Menu, theme, Input } from 'antd';
+import { AudioOutlined } from '@ant-design/icons';
+import Card from '../components/Card/page'
 
-import React, {useEffect, useState} from 'react';
-import { Breadcrumb, Layout, Menu, theme } from 'antd';
+const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const App = () => {
 
-  const fetchProducts= async() => {
+  const [productList, setProductList] = useState([])
+  const fetchProducts = async()=> {
     const res = await fetch('http://localhost:4000/products')
     const data = await res.json()
-    console.log(data.productList)
-
-
+    setProductList(data.productList)
   }
 
+
   useEffect(()=>{
-    fetchProducts()
+  fetchProducts()
   },[])
+
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
+
+  const suffix = (
+    <AudioOutlined
+      style={{
+        fontSize: 16,
+        color: '#1677ff',
+      }}
+    />
+  );
+  const onSearch = (value, _e, info) => console.log(info?.source, value);
   return (
-    <Layout>
+    <Layout className="layout">
       <Header
         style={{
-          position: 'sticky',
-          top: 0,
-          zIndex: 1,
-          width: '100%',
           display: 'flex',
           alignItems: 'center',
+          backgroundColor:'#fff',
+          border: '1px solid'
         }}
       >
         <div className="demo-logo" />
+          
+        <Image
+      src="/hulakilogo.png"
+      width={60}
+      height={60}
+      alt="Logo"
+    />
         <Menu
           theme="dark"
           mode="horizontal"
           defaultSelectedKeys={['2']}
-          items={new Array(3).fill(null).map((_, index) => ({
-            key: String(index + 1),
-            label: `nav ${index + 1}`,
-          }))}
+          items={[{key:1, label:"login"},{key:2, label:"sign up"} ]}
         />
       </Header>
       <Content
-        className="site-layout"
         style={{
           padding: '0 50px',
         }}
@@ -54,18 +70,30 @@ const App = () => {
             margin: '16px 0',
           }}
         >
-          <Breadcrumb.Item>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>List</Breadcrumb.Item>
-          <Breadcrumb.Item>App</Breadcrumb.Item>
+          <Search
+      placeholder="Search for Products"
+      enterButton="Search"
+      size="large"
+      suffix={suffix}
+      onSearch={onSearch}
+    />
         </Breadcrumb>
         <div
+          className="site-layout-content"
           style={{
-            padding: 24,
-            minHeight: 380,
             background: colorBgContainer,
+            display:'flex',
+            margin:'10px'
+            
           }}
         >
-          Content
+
+
+          {productList.length > 0 && productList.map((item,id)=>{
+            return (
+             <Card item={item}/>
+            )
+          }) }
         </div>
       </Content>
       <Footer
@@ -78,6 +106,4 @@ const App = () => {
     </Layout>
   );
 };
-
-
 export default App;
