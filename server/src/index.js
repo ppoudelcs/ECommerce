@@ -3,7 +3,8 @@ const cors = require('cors')
 const connection = require('./db/connection')
 const app = express()
 
-
+require('dotenv').config()
+console.log(process.env.SECRET_KEY)
 
 const userRoute=require('./routes/user')
 const productRoute=require('./routes/product')
@@ -18,7 +19,7 @@ app.use(productRoute)
 
 
 
-const port = 4000
+const port = process.env.PORT
 connection()
 
 

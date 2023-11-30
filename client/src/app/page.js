@@ -4,14 +4,16 @@ import Image from 'next/image'
 import { Breadcrumb, Layout, Menu, theme, Input } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import Card from '../components/Card/page'
+import { Pagination } from 'antd';
 
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const App = () => {
 
   const [productList, setProductList] = useState([])
-  const fetchProducts = async()=> {
-    const res = await fetch('http://localhost:4000/products')
+  const [searchList, setSearchList] = useState([])
+  const fetchProducts = async(page=1,pageSize=3)=> {
+    const res = await fetch(`http://localhost:4000/products?page=${page}`)
     const data = await res.json()
     setProductList(data.productList)
   }
@@ -34,7 +36,11 @@ const App = () => {
       }}
     />
   );
-  const onSearch = (value, _e, info) => console.log(info?.source, value);
+  const onSearch = async(value, _e, info) => {
+  const res = await fetch('http://localhost:4000/search-products?name='+value)
+  const data = await res.json()
+  setSearchList(data.productList)
+  };
   return (
     <Layout className="layout">
       <Header
@@ -77,6 +83,7 @@ const App = () => {
       suffix={suffix}
       onSearch={onSearch}
     />
+    {JSON.stringify(searchList)}
         </Breadcrumb>
         <div
           className="site-layout-content"
@@ -101,7 +108,7 @@ const App = () => {
           textAlign: 'center',
         }}
       >
-        Ant Design ©2023 Created by Ant UED
+       <Pagination onChange={(page)=>fetchProducts(page)} defaultCurrent={1} total={500} />
       </Footer>
     </Layout>
   );
