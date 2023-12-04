@@ -7,7 +7,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Alert } from 'antd';
 import { message } from 'antd';
-
+import { setLoginDetails } from '../../redux/reducerSlices/userSlices';
+import { useDispatch } from "react-redux";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -29,6 +30,8 @@ const SignupSchema = Yup.object().shape({
 
 const Home = () => {
 
+  const dispatch = useDispatch();
+
   const [messageApi, contextHolder] = message.useMessage();
 
   const handleLogin = async(values)=>{
@@ -46,6 +49,9 @@ const Home = () => {
       content: data.msg,
     });
 
+    if(res.status==200){
+      dispatch(setLoginDetails(data.userDetails))
+    }
     console.log(res)
 
   }

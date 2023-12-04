@@ -1,6 +1,7 @@
 'use client'
 import React, {useState, useEffect} from 'react';
 import Image from 'next/image'
+import { useSelector } from 'react-redux'
 import { Breadcrumb, Layout, Menu, theme, Input } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import Card from '../components/Card/page'
@@ -9,10 +10,11 @@ import { Pagination } from 'antd';
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const App = () => {
+  const {age} = useSelector(state=>state.user)
 
   const [productList, setProductList] = useState([])
   const [searchList, setSearchList] = useState([])
-  const fetchProducts = async(page=1,pageSize=3)=> {
+  const fetchProducts = async(page=1)=> {
     const res = await fetch(`http://localhost:4000/products?page=${page}`)
     const data = await res.json()
     setProductList(data.productList)
@@ -43,6 +45,7 @@ const App = () => {
   };
   return (
     <Layout className="layout">
+     
       <Header
         style={{
           display: 'flex',
@@ -53,12 +56,12 @@ const App = () => {
       >
         <div className="demo-logo" />
           
-        <Image
+        {/* <Image
       src="/hulakilogo.png"
       width={60}
       height={60}
       alt="Logo"
-    />
+    /> */}
         <Menu
           theme="dark"
           mode="horizontal"
@@ -83,6 +86,7 @@ const App = () => {
       suffix={suffix}
       onSearch={onSearch}
     />
+     {age}
     {JSON.stringify(searchList)}
         </Breadcrumb>
         <div
