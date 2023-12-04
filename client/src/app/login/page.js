@@ -30,7 +30,8 @@ const SignupSchema = Yup.object().shape({
 
 const Home = () => {
 
-  const dispatch = useDispatch();
+
+  const dispatch = useDispatch(); //dispatch
 
   const [messageApi, contextHolder] = message.useMessage();
 
