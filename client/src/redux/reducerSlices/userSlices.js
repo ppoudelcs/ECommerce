@@ -10,7 +10,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setLoginDetails: (state, actions) => {
-      
+      state.userDetails= actions.payload
     },
     handleLogout: (state) => {
       
