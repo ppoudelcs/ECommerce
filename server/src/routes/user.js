@@ -37,15 +37,16 @@ router.post('/register', async (req, res) => {
   router.post('/login', async (req, res) => {
     try {
   
-      const userDetails = await User.findOne({phoneNumber: req.body.phoneNumber})
+      const userDetails = await User.findOne({phoneNumber: req.body.phoneNumber}).lean() //To exclude automatically created hidden data and features behind the scene
       if (!userDetails) {
         res.status(401).json({ msg: 'Invalid Credentials' })
       } else {
         const isMatched = await bcrypt.compare(req.body.password, userDetails.password)
         if (isMatched) {
           const token = jwt.sign({ phoneNumber: 9841000000 }, process.env.SECRET_KEY);
-          
-          res.json({ msg: 'Login Success', token, userDetails })
+          const {password, ...userInfo} = userDetails
+          console.log(userInfo)
+          res.json({ msg: 'Login Success', token, userDetails:userInfo })
         } else {
           res.status(401).json({ msg: 'Incorrect password' })
         }

@@ -10,7 +10,12 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setLoginDetails: (state, actions) => {
-      state.userDetails= actions.payload
+    //   state.userDetails= actions.payload
+    return{
+        ...state, // rest operator
+        userDetails: actions.payload,
+        isLoggedIn: true
+    }
     },
     handleLogout: (state) => {
       
