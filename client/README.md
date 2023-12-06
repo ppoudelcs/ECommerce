@@ -41,3 +41,10 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ##install redux 
 npm i react-redux @reduxjs/toolkit redux redux-logger
 
+#client side
+npm i react-redux @reduxjs/toolkit redux redux-logger
+npm i redux-persist
+
+#server side
+npm i multer
+

@@ -9,9 +9,9 @@ import { Alert } from 'antd';
 import { message } from 'antd';
 import { setLoginDetails } from '../../redux/reducerSlices/userSlices';
 import { useDispatch } from "react-redux";
-import Router from 'next/router';
+import { useRouter } from 'next/navigation'
 
-const router = Router
+const router = useRouter()
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -55,7 +55,7 @@ const Home = () => {
 
     if(res.status==200){
       dispatch(setLoginDetails(data.userDetails))
-      // router.push('/')
+      router.push('/')
     }
     
 
