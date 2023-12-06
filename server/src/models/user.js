@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
   email: String,
   password: String,
   confirmPassword: String,
-  phoneNumber: Number
+  phoneNumber: Number,
+  avatar: String
 
   
 });
