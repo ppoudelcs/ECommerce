@@ -1,27 +1,28 @@
 'use client'
-///////////////////
 import React, {useState, useEffect} from 'react';
 import Image from 'next/image'
-import { useSelector } from 'react-redux'
-import { Breadcrumb, Layout, Menu, theme, Input, Popover, Avatar } from 'antd';
+import { useSelector } from 'react-redux';
+import { Breadcrumb, Layout, Menu, theme, Input } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
-import Card from '../components/Card/page'
+import Link from 'next/link'
+import { Avatar, Divider, Tooltip, Button, Popover, ConfigProvider  } from 'antd';
+
 import { Pagination } from 'antd';
 
-import Link from 'next/link';
 
 
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const App = () => {
-  const {age} = useSelector(state=>state.user)
-
+  const {userDetails} = useSelector(state=>state.user)
   const [productList, setProductList] = useState([])
   const [searchList, setSearchList] = useState([])
+  const [count,setCount] = useState(0)
   const fetchProducts = async(page=1)=> {
-    const res = await fetch(`http://localhost:4000/products?page=${page}`)
+    const res = await fetch('http://localhost:4000/products?page='+page)
     const data = await res.json()
-    setProductList(data.productList)
+    setProductList(data.productList) 
+    setCount(data.totalCount)
   }
 
 
@@ -29,7 +30,13 @@ const App = () => {
   fetchProducts()
   },[])
 
-
+  const text = <span>{userDetails.email}</span>;
+  const content = (
+    <div>
+     <Link href="/profile"><span>Profile</span></Link>
+      <p>Logout</p>
+    </div>
+  );
   const {
     token: { colorBgContainer },
   } = theme.useToken();
@@ -42,32 +49,21 @@ const App = () => {
       }}
     />
   );
-  const onSearch = async(value, _e, info) => {
-  const res = await fetch('http://localhost:4000/search-products?name='+value)
-  const data = await res.json()
-  setSearchList(data.productList)
+  const onSearch = async (e) => {
+    const res = await  fetch('http://localhost:4000/search-products?name='+e.target.value)
+    const data = await res.json()
+    setSearchList(data.productList)
   };
   return (
     <Layout className="layout">
-     
-      <Header
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          backgroundColor:'#fff',
-          border: '1px solid'
-        }}
-      >
-        <div className="demo-logo" />
-          
-        {/* <Image
-      src="/hulakilogo.png"
-      width={60}
-      height={60}
-      alt="Logo"
-    /> */}
 
-      <div>
+
+
+
+
+
+
+
 
         <Menu
           theme="dark"
@@ -104,13 +100,20 @@ const App = () => {
         }}
       >
 
-        <Popover placement="bottomRight" title={'Title'} content={'content'}>
+        <Popover placement="bottomRight" title={text} content={content}>
         <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
         </Popover>
       </div>
             </Menu>
-      </div>
-      </Header>
+     <Search
+      placeholder="Enter Your Traking Order"
+      enterButton="Search"
+      size="medium"
+      suffix={suffix}
+      onChange={onSearch}
+    />
+
+
       <Content
         style={{
           padding: '0 50px',
@@ -121,42 +124,20 @@ const App = () => {
             margin: '16px 0',
           }}
         >
-          <Search
-      placeholder="Search for Products"
-      enterButton="Search"
-      size="large"
-      suffix={suffix}
-      onSearch={onSearch}
-    />
-     {age}
-    {JSON.stringify(searchList)}
+
         </Breadcrumb>
-        <div
-          className="site-layout-content"
-          style={{
-            background: colorBgContainer,
-            display:'flex',
-            margin:'10px'
-            
-          }}
-        >
-
-
-          {productList.length > 0 && productList.map((item,id)=>{
-            return (
-             <Card item={item}/>
-            )
-          }) }
-        </div>
       </Content>
       <Footer
         style={{
           textAlign: 'center',
         }}
       >
-       <Pagination onChange={(page)=>fetchProducts(page)} defaultCurrent={1} total={500} />
+        {/* <Top/> */}
+        Hulaki ©2023
       </Footer>
     </Layout>
   );
 };
 export default App;
+
+//the whole page can be imported and used like <Home/>

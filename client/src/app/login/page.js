@@ -52,8 +52,9 @@ const Home = () => {
 
     if(res.status==200){
       dispatch(setLoginDetails(data.userDetails))
+      router.push('/')
     }
-    console.log(res)
+    
 
   }
   return(
