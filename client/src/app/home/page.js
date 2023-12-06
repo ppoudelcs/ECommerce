@@ -14,7 +14,7 @@ import Link from 'next/link';
 const { Search } = Input;
 const { Header, Content, Footer } = Layout;
 const App = () => {
-  const {age} = useSelector(state=>state.user)
+  const {userDetails} = useSelector(state=>state.user)
 
   const [productList, setProductList] = useState([])
   const [searchList, setSearchList] = useState([])
@@ -28,6 +28,14 @@ const App = () => {
   useEffect(()=>{
   fetchProducts()
   },[])
+
+  const userEmail = <span>{userDetails.email}</span>
+  const content = (
+    <div>
+        <Link href="/profile"><span>Profile</span></Link>
+        <p>Logout</p>
+    </div>
+  )
 
 
   const {
@@ -104,7 +112,7 @@ const App = () => {
         }}
       >
 
-        <Popover placement="bottomRight" title={'Title'} content={'content'}>
+        <Popover placement="bottomRight" title={userEmail} content={content}>
         <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
         </Popover>
       </div>
@@ -128,7 +136,7 @@ const App = () => {
       suffix={suffix}
       onSearch={onSearch}
     />
-     {age}
+     
     {JSON.stringify(searchList)}
         </Breadcrumb>
         <div

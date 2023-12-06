@@ -37,6 +37,7 @@ router.post('/products', async (req, res) => {
 
   router.get('/search-products', async (req, res) => {
     const data = await Product.find({productName: {$regex: req.query.name}})
+    res.json({productList: data})
   })
   
 
