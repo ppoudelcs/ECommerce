@@ -1,6 +1,6 @@
 'use client'  //why use client is used?
 
-import React from 'react';
+import React, {useState} from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 
@@ -26,6 +26,7 @@ const ProductSchema = Yup.object().shape({
     .max(100000, 'Too Long!')
     .required('Required'),
     
+    
 
 });
 
@@ -33,12 +34,20 @@ const Product = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
   //?? relationship betn messageApi, contextHolder
+  const [productImg, setProductImg] = useState(null)
 
   const productRegister = async (values) => {
+
+    var formData = new FormData()
+    formData.append('productImage', productImg)
+
+    Object.entries(values).map((item,id)=>{
+      formData.append(item[0], item[1])
+    })
+
     const res = await fetch('http://localhost:4000/products', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values)
+     body: formData
     })
 
     const data = await res.json()
@@ -50,6 +59,11 @@ const Product = () => {
 
     console.log(res)
 
+  }
+
+  const saveImg = (e) => {
+    setProductImg(e.target.files[0])
+    // setProductImg(e.target.files[0])
   }
 
   return (
@@ -95,6 +109,8 @@ const Product = () => {
             {errors.productDescription && touched.productDescription ? (
               <div>{errors.productDescription}</div>
             ) : null}
+            <br/>
+            <input type="file" onChange={saveImg}/>
             <br/>
             <button type="submit">Register</button> 
             <br/>

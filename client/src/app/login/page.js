@@ -11,7 +11,7 @@ import { setLoginDetails } from '../../redux/reducerSlices/userSlices';
 import { useDispatch } from "react-redux";
 import { useRouter } from 'next/navigation'
 
-const router = useRouter()
+
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -33,7 +33,7 @@ const SignupSchema = Yup.object().shape({
 
 const Home = () => {
 
-
+  const router = useRouter()
   const dispatch = useDispatch(); //dispatch
 
   const [messageApi, contextHolder] = message.useMessage();

@@ -1,10 +1,11 @@
 'use client'  //why use client is used?
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Formik, Form, Field } from 'formik';
 import * as Yup from 'yup';
 import Link from 'next/link';
 import { message } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
@@ -32,25 +33,52 @@ const Register = () => {
 
   const [messageApi, contextHolder] = message.useMessage();
   //?? relationship betn messageApi, contextHolder
+  const [file, setFile] = useState(null)
+
+
+
+
+
+  // const handleRegister = async (values) => {
+  //   const res = await fetch('http://localhost:4000/register', {
+  //     method: 'POST',
+  //     headers: { 'Content-Type': 'application/json' },
+  //     body: JSON.stringify(values),
+
+  //   })
+  const saveImage = (e) => {
+    setFile(e.target.files[0])
+  }
 
   const handleRegister = async (values) => {
-    const res = await fetch('http://localhost:4000/register', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(values),
-      
+    var formData = new FormData();
+    formData.append('avatar', file)
+
+
+    //looping
+    Object.entries(values).map((item, id) => {
+      formData.append(item[0], item[1])
     })
 
-    const data = await res.json()
+    const res = await fetch('http://localhost:4000/register', {
+      method: 'POST',
+      body: formData  
+    })
 
+     
+    const data = await res.json()
+  
     messageApi.open({
       type: res.status == 200 ? 'success' : 'error',
       content: data.msg,
-    });
-
-    console.log(res)
-
+    })
   }
+
+
+  
+
+
+
 
   return (
     <div>
@@ -89,6 +117,8 @@ const Register = () => {
             <br />
             <Field name="phoneNumber" type="tel" placeholder="Enter phone number" />
             {errors.phoneNumber && touched.phoneNumber ? <div>{errors.phoneNumber}</div> : null}
+            <br />
+            <input type="file" onChange={saveImage} />
             <br />
 
 

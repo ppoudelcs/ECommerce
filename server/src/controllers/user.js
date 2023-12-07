@@ -16,7 +16,7 @@ const registerNewUser = async (req, res) => {
          } else {
            const hashPassword = await bcrypt.hash(req.body.password, saltRounds)
            req.body.password = hashPassword
-           req.body.avatar = req.file.path
+           req.body.avatar = req.file.filename
            const data = await User.create(req.body)
      
            if (data) res.json({ msg: 'user registered' })

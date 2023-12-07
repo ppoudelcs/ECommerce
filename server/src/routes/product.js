@@ -1,11 +1,27 @@
 const express=require('express')
 const router=express.Router()
-
 const Product = require('../models/product')
 
+const multer  = require('multer')
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'uploads/products')
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1000)
+    cb(null, uniqueSuffix+'-'+ file.originalname )
+  }
+})
+const upload = multer({ storage: storage })
 
-router.post('/products', async (req, res) => {
+
+
+
+
+router.post('/products', upload.single('productImage'),async (req, res) => {
   
+  
+  req.body.productImage = req.file.filename
   const data = await Product.create(req.body)
   if (data) {
     res.json({ msg: `${req.body.productName} registered succesfully` })
