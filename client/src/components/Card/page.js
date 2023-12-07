@@ -5,7 +5,8 @@ const { Meta } = Card;
 
 function page(props) {
 
-  const imgSource = `https://source.unsplash.com/900x1600/?${props.item.productName}`
+  // const imgSource = `https://source.unsplash.com/900x1600/?${props.item.productName}`
+  const imgSource = `http://localhost:4000/products-image?userId=${props.item._id}`
 
   return (
     <Link href={`/products/${props.item._id}`}>

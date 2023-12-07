@@ -3,7 +3,7 @@
 import React, {useState, useEffect} from 'react';
 import Image from 'next/image'
 import { useSelector } from 'react-redux'
-import { Breadcrumb, Layout, Menu, theme, Input, Popover, Avatar } from 'antd';
+import { Breadcrumb, Layout, Menu, theme, Input, Popover, Avatar, Carousel } from 'antd';
 import { AudioOutlined } from '@ant-design/icons';
 import Card from '../../components/Card/page'
 import { Pagination } from 'antd';
@@ -113,7 +113,7 @@ const App = () => {
       >
 
         <Popover placement="bottomRight" title={userEmail} content={content}>
-        <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=1" />
+        <Avatar src="https://xsgames.co/randomusers/avatar.php?g=pixel&key=10" />
         </Popover>
       </div>
             </Menu>
@@ -152,11 +152,15 @@ const App = () => {
 
           {productList.length > 0 && productList.map((item,id)=>{
             return (
-             <Card item={item}/>
+              
+                  <Card item={item}/>
+
+                
             )
           }) }
         </div>
       </Content>
+      
       <Footer
         style={{
           textAlign: 'center',
